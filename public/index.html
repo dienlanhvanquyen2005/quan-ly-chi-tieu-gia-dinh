@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Quản lý chi tiêu gia đình">
+<title>Quản Lý Chi Tiêu Gia Đình</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+  <div class="container topbar">
+    <div>
+      <h1>🏠 Quản Lý Chi Tiêu Gia Đình</h1>
+      <p>Theo dõi lương, thu nhập, chi tiêu và số dư.</p>
+    </div>
+    <div class="top-actions">
+      <button id="backupBtn" class="btn light">⬇ Sao lưu</button>
+      <label class="btn light">⬆ Khôi phục<input id="restoreInput" type="file" accept=".json" hidden></label>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <section class="stats">
+    <div class="card stat"><span>💰 Tổng thu nhập</span><strong id="totalIncome">0 đ</strong></div>
+    <div class="card stat"><span>🔴 Tổng chi tiêu</span><strong id="totalExpense">0 đ</strong></div>
+    <div class="card stat"><span>🟢 Số dư</span><strong id="balance">0 đ</strong></div>
+    <div class="card stat"><span>📋 Số khoản chi</span><strong id="expenseCount">0</strong></div>
+  </section>
+
+  <section class="card">
+    <div class="section-title"><h2>💵 Thêm lương / thu nhập</h2></div>
+    <form id="incomeForm" class="form-grid">
+      <div><label>Ngày nhận</label><input id="incomeDate" type="date" required></div>
+      <div><label>Nguồn thu nhập</label><input id="incomeName" placeholder="Ví dụ: Lương tháng 9" required></div>
+      <div><label>Số tiền</label><input id="incomeAmount" type="number" min="1" step="1" placeholder="15000000" required></div>
+      <div><label>Ghi chú</label><input id="incomeNote" placeholder="Không bắt buộc"></div>
+      <button class="btn green" type="submit">+ Thêm thu nhập</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="section-title"><h2>➕ Thêm khoản chi</h2></div>
+    <form id="expenseForm" class="form-grid">
+      <div><label>Ngày chi</label><input id="expenseDate" type="date" required></div>
+      <div><label>Nội dung</label><input id="expenseName" placeholder="Tiền điện, ăn uống..." required></div>
+      <div><label>Số tiền</label><input id="expenseAmount" type="number" min="1" step="1" placeholder="500000" required></div>
+      <div><label>Danh mục</label>
+        <select id="expenseCategory">
+          <option>Ăn uống</option><option>Điện nước</option><option>Nhà cửa</option>
+          <option>Xăng xe</option><option>Mua sắm</option><option>Học tập</option>
+          <option>Y tế</option><option>Giải trí</option><option>Khác</option>
+        </select>
+      </div>
+      <button class="btn dark" type="submit">+ Thêm khoản chi</button>
+    </form>
+  </section>
+
+  <section class="card">
+    <div class="section-title"><h2>🔎 Tìm kiếm & lọc</h2></div>
+    <div class="filters">
+      <div><label>Tìm nội dung / danh mục</label><input id="search" placeholder="Ví dụ: tiền điện"></div>
+      <div><label>Từ ngày</label><input id="fromDate" type="date"></div>
+      <div><label>Đến ngày</label><input id="toDate" type="date"></div>
+      <div><label>Loại</label><select id="typeFilter"><option value="all">Tất cả</option><option value="income">Thu nhập</option><option value="expense">Chi tiêu</option></select></div>
+      <button id="clearFilters" class="btn gray">Xóa lọc</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">
+      <h2>📒 Lịch sử giao dịch</h2>
+      <span id="status" class="status">Đang tải...</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Ngày</th><th>Loại</th><th>Nội dung</th><th>Danh mục</th><th class="right">Số tiền</th><th></th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <div id="empty" class="empty">Chưa có dữ liệu.</div>
+    <div class="summary">
+      <b>Thu trong kết quả: <span id="filterIncome">0 đ</span></b>
+      <b>Chi trong kết quả: <span id="filterExpense">0 đ</span></b>
+    </div>
+  </section>
+</main>
+
+<footer>Quản Lý Chi Tiêu Gia Đình • Dữ liệu được lưu trên máy chủ.</footer>
+<script src="/app.js"></script>
+</body>
+</html>
