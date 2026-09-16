@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Quản lý lương vợ, lương chồng và chi tiêu gia đình">
+<title>Quản Lý Chi Tiêu Gia Đình</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header><div class="container topbar">
+  <div><h1>🏠 Quản Lý Chi Tiêu Gia Đình</h1><p>Quản lý riêng lương vợ, lương chồng và các khoản chi trong gia đình.</p></div>
+  <div class="top-actions">
+    <button id="backupBtn" class="btn light">⬇ Sao lưu</button>
+    <label class="btn light">⬆ Khôi phục<input id="restoreInput" type="file" accept=".json" hidden></label>
+  </div>
+</div></header>
+
+<main class="container">
+<section class="salary-grid">
+  <div class="card salary husband"><div class="salary-icon">👨</div><div><span>Lương chồng</span><strong id="husbandSalary">0 đ</strong></div></div>
+  <div class="card salary wife"><div class="salary-icon">👩</div><div><span>Lương vợ</span><strong id="wifeSalary">0 đ</strong></div></div>
+  <div class="card salary total"><div class="salary-icon">💰</div><div><span>Tổng lương gia đình</span><strong id="familySalary">0 đ</strong></div></div>
+</section>
+
+<section class="stats">
+ <div class="card stat"><span>💵 Tổng thu nhập</span><strong id="totalIncome">0 đ</strong></div>
+ <div class="card stat"><span>🔴 Tổng chi tiêu</span><strong id="totalExpense">0 đ</strong></div>
+ <div class="card stat"><span>🟢 Tiền dư</span><strong id="balance">0 đ</strong></div>
+ <div class="card stat"><span>📋 Số khoản chi</span><strong id="expenseCount">0</strong></div>
+</section>
+
+<section class="card">
+ <h2>💵 Nhập lương</h2>
+ <p class="hint">Bạn có thể nhập riêng lương của chồng và lương của vợ. Mỗi tháng có thể nhập lại một khoản mới.</p>
+ <form id="incomeForm" class="form-grid">
+  <div><label>Ngày nhận</label><input id="incomeDate" type="date" required></div>
+  <div><label>Người nhận lương</label><select id="incomePerson"><option value="husband">👨 Chồng</option><option value="wife">👩 Vợ</option></select></div>
+  <div><label>Số tiền</label><input id="incomeAmount" type="number" min="1" step="1" placeholder="15000000" required></div>
+  <div><label>Ghi chú</label><input id="incomeNote" placeholder="Lương tháng 9"></div>
+  <button class="btn green" type="submit">+ Thêm lương</button>
+ </form>
+</section>
+
+<section class="card">
+ <h2>🧾 Các khoản chi trong tháng</h2>
+ <p class="hint">Chọn đúng khoản chi, nhập số tiền. Website sẽ tự cộng tổng và tính tiền dư.</p>
+ <form id="expenseForm" class="form-grid">
+  <div><label>Ngày chi</label><input id="expenseDate" type="date" required></div>
+  <div><label>Khoản chi</label><select id="expenseCategory">
+    <option>Tiền ăn</option><option>Tiền học</option><option>Tiền trả góp</option>
+    <option>Tiền điện</option><option>Tiền bỉm</option><option>Tiền sữa</option>
+    <option>Tiền nước</option><option>Tiền xăng xe</option><option>Mua sắm</option><option>Y tế</option><option>Khác</option>
+  </select></div>
+  <div><label>Số tiền</label><input id="expenseAmount" type="number" min="1" step="1" placeholder="500000" required></div>
+  <div><label>Ghi chú</label><input id="expenseNote" placeholder="Ví dụ: tiền ăn tháng này"></div>
+  <button class="btn dark" type="submit">+ Thêm khoản chi</button>
+ </form>
+</section>
+
+<section class="card">
+ <h2>📊 Tổng các khoản chi</h2>
+ <div id="categoryTotals" class="category-grid"></div>
+ <div class="month-box">
+   <div><span>Tổng lương tháng đang chọn</span><b id="monthIncome">0 đ</b></div>
+   <div><span>Tổng chi tháng đang chọn</span><b class="red" id="monthExpense">0 đ</b></div>
+   <div><span>Tiền dư tháng</span><b class="green-text" id="monthBalance">0 đ</b></div>
+ </div>
+</section>
+
+<section class="card">
+ <h2>🔎 Tìm kiếm theo ngày tháng năm</h2>
+ <div class="filters">
+  <div><label>Tìm nội dung / khoản chi</label><input id="search" placeholder="Ví dụ: tiền điện"></div>
+  <div><label>Từ ngày</label><input id="fromDate" type="date"></div>
+  <div><label>Đến ngày</label><input id="toDate" type="date"></div>
+  <div><label>Loại</label><select id="typeFilter"><option value="all">Tất cả</option><option value="income">Lương</option><option value="expense">Chi tiêu</option></select></div>
+  <button id="clearFilters" class="btn gray">Xóa lọc</button>
+ </div>
+</section>
+
+<section class="card">
+ <div class="section-title"><h2>📒 Lịch sử</h2><span id="status" class="status">Đang tải...</span></div>
+ <div class="table-wrap"><table><thead><tr><th>Ngày</th><th>Loại</th><th>Người / khoản</th><th>Ghi chú</th><th class="right">Số tiền</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+ <div id="empty" class="empty">Chưa có dữ liệu.</div>
+ <div class="summary"><b>Thu trong kết quả: <span id="filterIncome">0 đ</span></b><b>Chi trong kết quả: <span id="filterExpense">0 đ</span></b></div>
+</section>
+</main>
+<footer>Quản Lý Chi Tiêu Gia Đình • Dữ liệu được lưu trên máy chủ.</footer>
+<script src="/app.js"></script>
+</body></html>
